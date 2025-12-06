@@ -12,7 +12,7 @@ cd Data
 
 2. Crear y activar entorno virtual:
 ```bash
-python -m venv venv
+python -m venv venv 
 
 # Windows
 venv\Scripts\activate

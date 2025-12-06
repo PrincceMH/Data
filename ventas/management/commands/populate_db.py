@@ -10,10 +10,10 @@ class Command(BaseCommand):
     help = 'datos generados'
 
     def add_arguments(self, parser):
-        parser.add_argument('users', type=int, default=3, help='Número de representantes')
-        parser.add_argument('companies', type=int, default=50, help='Número de compañías')
-        parser.add_argument('customers', type=int, default=1000, help='Número de clientes')
-        parser.add_argument('interactions', type=int, default=500, help='Interacciones por cliente')
+        parser.add_argument('--users', type=int, default=3, help='Número de representantes')
+        parser.add_argument('--companies', type=int, default=50, help='Número de compañías')
+        parser.add_argument('--customers', type=int, default=1000, help='Número de clientes')
+        parser.add_argument('--interactions', type=int, default=500, help='Interacciones por cliente')
 
     def handle(self, *args, **options):
         fake = Faker('es_ES')
