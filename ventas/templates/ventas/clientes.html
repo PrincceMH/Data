@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CRM</title>
+    <style>
+        body {
+                font-family: Arial;
+                margin: 0; 
+                background: #f4f4f4; 
+            }
+        .container { 
+                max-width: 1200px; 
+                margin: 0 auto; 
+                padding: 20px; 
+            }
+        h1 { 
+            background: black; 
+            color: white; 
+            padding: 20px; 
+            margin: 0; 
+        }
+        .filtros { 
+            background: white; 
+            padding: 15px; 
+            margin: 20px 0; 
+            border-radius: 5px; 
+        }
+        .filtros form { 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+        }
+        input, select, button { 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 3px; 
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+        }
+        table { 
+            width: 100%; 
+            background: white; 
+            border-collapse: collapse; 
+        }
+        th, td { 
+            padding: 12px; 
+            text-align: left; 
+            border-bottom: 1px solid #ddd; 
+        }
+        th { 
+            background: #f8f9fa; 
+            font-weight: bold; 
+        }
+        tr:hover { 
+            background: #f8f9fa; 
+        }
+        .paginacion { 
+            text-align: center; 
+            margin: 20px 0; 
+        }
+        .paginacion a { 
+            padding: 8px 12px; 
+            margin: 0 2px; 
+            background: white; 
+            text-decoration: none; 
+            color: #333; 
+            border: 1px solid #ddd; 
+        }
+    </style>
+</head>
+<body>
+    <h1>CRM - Lista de Clientes ({{ total }})</h1>
+    
+    <div class="container">
+        <div class="filtros">
+            <form method="get">
+                <input type="text" name="buscar" placeholder="Buscar nombre" value="{{ buscar }}">
+                
+                <select name="cumple">
+                    <option value="">Cumpleaños</option>
+                    <option value="hoy" {% if cumple_filtro == 'hoy' %}selected{% endif %}>Hoy</option>
+                    <option value="semana" {% if cumple_filtro == 'semana' %}selected{% endif %}>Esta semana</option>
+                    <option value="mes" {% if cumple_filtro == 'mes' %}selected{% endif %}>Este mes</option>
+                </select>
+                
+                <select name="orden">
+                    <option value="nombre" {% if orden == 'nombre' %}selected{% endif %}>Nombre</option>
+                    <option value="empresa" {% if orden == 'empresa' %}selected{% endif %}>Empresa</option>
+                    <option value="cumple" {% if orden == 'cumple' %}selected{% endif %}>Cumpleaños</option>
+                    <option value="ultima" {% if orden == 'ultima' %}selected{% endif %}>Ultima interaccion</option>
+                </select>
+                
+                <select name="dir">
+                    <option value="asc" {% if direccion == 'asc' %}selected{% endif %}>Asc</option>
+                    <option value="desc" {% if direccion == 'desc' %}selected{% endif %}>Desc</option>
+                </select>
+                
+                <button type="submit">Filtrar</button>
+                <a href="?" style="padding: 8px 12px; background: #ddd; text-decoration: none; color: black; border-radius: 3px;">Limpiar</a>
+            </form>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Empresa</th>
+                    <th>Cumpleaños</th>
+                    <th>Ultima Interaccion</th>
+                    <th>Representante</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.nombre }}</td>
+                    <td>{{ cliente.empresa }}</td>
+                    <td>{{ cliente.cumple }}</td>
+                    <td>{{ cliente.ultima|default:"Sin interacciones" }}</td>
+                    <td>{{ cliente.representante }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">No hay clientes</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if total_paginas > 1 %}
+        <div class="paginacion">
+            {% if pagina > 1 %}
+            <a href="?buscar={{ buscar }}&cumple={{ cumple_filtro }}&orden={{ orden }}&dir={{ direccion }}&p={{ pagina|add:"-1" }}">Anterior</a>
+            {% endif %}
+            
+            <span>Pagina {{ pagina }} de {{ total_paginas }}</span>
+            
+            {% if pagina < total_paginas %}
+            <a href="?buscar={{ buscar }}&cumple={{ cumple_filtro }}&orden={{ orden }}&dir={{ direccion }}&p={{ pagina|add:"1" }}">Siguiente</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
